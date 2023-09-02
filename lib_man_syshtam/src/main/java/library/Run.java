@@ -129,8 +129,8 @@ public class Run {
                             mem.list_m_books();
                         }
                         else if(arg==3){
-                            if(mem.pay_fine()!=0){
-                                System.out.println("You have some fine due\nKindly pay the fine first.");
+                            if(mem.pay_fine()!=0 ){
+                                System.out.println("You have some fine due\nKindly pay first.");
                                 continue;
                             }
                             if(mem.holding.size()==2){
@@ -156,16 +156,21 @@ public class Run {
                             int id;
                             System.out.print("Book id: ");
                             id = sc.nextInt();
+                            mem.pay_fine();
+                            int fine = mem.pay_fine(id);
                             mem.return_b(id); 
                             System.out.println("---------------------------------");
-                            System.out.println("Book ID: "+id+" Successfully returned. " + mem.pay_fine()+" Rupees has been charged for your delay of "+mem.pay_fine()/3+" days.");
+                            System.out.println("Book ID: "+id+" Successfully returned. " + fine +" Rupees has been charged for your delay of "+fine/3+" days.");
                         }
                         else if(arg==5){
-                            int fine = mem.pay_fine();
-                            int id;
-                            System.out.print("Book id: ");
-                            id = sc.nextInt();
-                            mem.return_b(id);
+                            if(mem.lib.books.size()!=0){
+                                System.out.println("Kindly return your books first..");
+                                continue;
+                            }
+                            if(mem.get_fine()==0){
+                                mem.pay_fine();
+                            }
+                            int fine = mem.get_fine();
                             System.out.println("---------------------------------");
                             if(fine==0){
                                 System.out.println("You have no fine!!");

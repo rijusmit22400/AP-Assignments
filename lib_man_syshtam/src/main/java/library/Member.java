@@ -15,6 +15,7 @@ public class Member {
     Map<Book,Calendar> holding = new HashMap<>();
     Library lib;
     int id;
+    Map<Book,Integer> fine = new HashMap<>();
     public void setID(int id){
         this.id=id;
     }
@@ -52,33 +53,45 @@ public class Member {
         }
     }
 
-    public int pay_fine(){
-        int normal_fine=0;
-        Calendar today = Calendar.getInstance();
-        for(Map.Entry<Book,Calendar> c: holding.entrySet()){
-            long f = (today.getTimeInMillis()-c.getValue().getTimeInMillis());
-            long days = f/(1000 * 60 * 60 * 24);
-            if(f>0){
-                normal_fine+=3*days;
-            }
+    public int get_fine(){
+        int sum=0;
+        for(int x: fine.values()){
+            sum+=x;
         }
-        return normal_fine;
+        return sum;
     }
-
-    public int pay_fine(int id){
-        int normal_fine=0;
+    public int pay_fine(int id) {
+        int normal_fine = 0;
         Calendar today = Calendar.getInstance();
-        for(Map.Entry<Book,Calendar> c: holding.entrySet()){
-            if(c.getKey().getID()==id){
-                long f = (today.getTimeInMillis()-c.getValue().getTimeInMillis());
-                long days = f/(1000);
-                if(f>0){
-                    normal_fine+=3*days;
+        for (Map.Entry<Book, Calendar> c : this.holding.entrySet()) {
+            if (c.getKey().getID() == id) {
+                long f = (today.getTimeInMillis() - c.getValue().getTimeInMillis());
+                long days = f / (1000);
+                if (f > 0) {
+                    normal_fine += 3 * days;
+                    fine.put(c.getKey(),normal_fine);
                 }
             }
         }
         return normal_fine;
     }
+
+    public int pay_fine() {
+        int return_fine = 0;
+        Calendar today = Calendar.getInstance();
+        for (Map.Entry<Book, Calendar> c : this.holding.entrySet()) {
+                int normal_fine = 0;
+                long f = (today.getTimeInMillis() - c.getValue().getTimeInMillis());
+                long days = f / (1000);
+                if (f > 0) {
+                    normal_fine += 3 * days;
+                    return_fine += normal_fine;
+                }
+                fine.put(c.getKey(),normal_fine);
+        }
+        return return_fine;
+    }
+    
 
     public int issue(int id, String tit){
         int av=0;
@@ -89,7 +102,7 @@ public class Member {
             if(tit_of_book.equals(tit.toLowerCase())==false){
                 return 0;
             }
-            today.add(Calendar.DAY_OF_YEAR, 10);
+            today.add(Calendar.SECOND, 10);
             this.lib.books.get(i).issueing();
             this.holding.put(lib.books.get(i),today);
             av=1;
