@@ -1,4 +1,4 @@
-package library;
+package com.library;
 
 public class Librarian {
     Library lib = new Library();
