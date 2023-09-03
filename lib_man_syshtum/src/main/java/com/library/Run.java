@@ -1,14 +1,16 @@
 package com.library;
 
 import java.util.*;
-
+// the app tadaa!!!!!!!!!
 public class Run {
     public static void run(){
+        //Aall the physical componenets of a library
         Librarian sameer = new Librarian();
         Library lib = new Library();
         int arg;
         sameer.setlib(lib);
         Scanner sc = new Scanner(System.in);
+        //two infinite loops in here for each level of accesss bortha/sista
         while(true){
             System.out.println("---------------------------------");
             System.out.println("1. Enter as librarian");
@@ -23,6 +25,7 @@ public class Run {
                 break;
             }
             else if(arg==1){
+                //entering as librarain named sameeer (variable name of course)
                 while(true){
                     System.out.println("---------------------------------");
                     System.out.println("1. Register a member");
@@ -38,6 +41,7 @@ public class Run {
                         break;
                     }
                     else if(arg==1){
+                        //this simply registers a memebr nothing to see here...
                         sc.nextLine();
                         System.out.printf("Name: ");
                         String name = sc.nextLine();
@@ -48,11 +52,16 @@ public class Run {
                         sameer.add_member(name.trim(), phone, age);
                     }
                     else if(arg==2){
+                        //sameer takes memebr of id of a user and removes them.
                         System.out.printf("Member ID: ");
                         int id = sc.nextInt();
                         sameer.rm_member(id);
                     }
                     else if(arg==3){
+                        //Here sameer assignes a book Id
+                        //to a new book and
+                        //adds all the specified copies in the library
+                        //also different copy gets a different id.
                         String name;
                         sc.nextLine();
                         System.out.print("Book title: ");
@@ -65,12 +74,14 @@ public class Run {
                         sameer.add_book(name.trim(), author.trim(), cpy);
                     }
                     else if(arg==4){
+                        // here sameer takes an ID of book and removes i
                         int id;
                         System.out.print("Book ID: ");
                         id = sc.nextInt(); 
                         sameer.rm_book(id);
                     }
                     else if(arg==5){
+                        //we see all the users along with there fines
                         if(lib.getMember_Count()==0){
                             System.out.println("Nothing to display........");
                             continue;
@@ -83,6 +94,7 @@ public class Run {
                         System.out.println(display.substring(0,display.length()-1));
                     }
                     else if(arg==6){
+                        //We see all the books here using string formatting
                         if(lib.getBook_Count()==0){
                             System.out.println("Nothing to display........");
                             continue;
@@ -100,16 +112,20 @@ public class Run {
                 }
             }
             else if(arg==2){
+                //entering as a memeber
                 sc.nextLine();
                 System.out.print("Name: ");
                 String name = sc.nextLine();
                 System.out.print("Phone: ");
                 long ph = sc.nextLong();
+                //it's authentication time.....
                 if(lib.auth(name,ph)){
+                    //once authenticated the memeber is weclomed unlike me in this college
                     int i = lib.findmem(name, ph);
                     System.out.println("Welcome: "+lib.members.get(i).Name.split(" ")[0]+" Member ID: "+lib.members.get(i).getID());
                     Member mem = lib.members.get(lib.findmem(name,ph));
                     while(true){
+                        //the interface begins.
                         System.out.println("---------------------------------");
                         System.out.println("1. List Available Books");
                         System.out.println("2. List My Books");
@@ -120,23 +136,35 @@ public class Run {
                         System.out.println("---------------------------------"); 
                         arg=sc.nextInt();
                         if(arg==6){
+                            //revenge of the break statement. this arg==6 exits the inner loop to back
+                            //to the outer one.
                             break;
                         }
                         else if(arg==1){
+                            //simply listing all books
                             mem.list_books();
                         }
                         else if(arg==2){
+                            //lisitng all books a member is holding
                             mem.list_m_books();
                         }
                         else if(arg==3){
+                            //Hehe sorry for the messsy code
+                            //it checks first if a memebr has payed all the due fines.
                             if(mem.pay_fine()!=0 ){
                                 System.out.println("You have some fine due\nKindly pay first.");
                                 continue;
                             }
+                            //member should hold 2 books at max
                             if(mem.holding.size()==2){
                                 System.out.println("You are currentrly holding the maximum amount of books.");
                                 continue;
                             }
+                            //here memeber inputs the book id and name to be issued
+                            //if there is a book available for that id it is issued.
+                            //there can be same books with different ids
+                            //one book can be issued with a specefic Id by someone else
+                            //therefore that book would not be available 
                             int id;
                             System.out.print("Book id: ");
                             id = sc.nextInt();
@@ -153,6 +181,7 @@ public class Run {
                             }
                         }
                         else if(arg==4){
+                            //book is returned and the amount of fine per that book is shown
                             int id;
                             System.out.print("Book id: ");
                             id = sc.nextInt();
@@ -163,12 +192,31 @@ public class Run {
                             System.out.println("Book ID: "+id+" Successfully returned. " + fine +" Rupees has been charged for your delay of "+fine/3+" days.");
                         }
                         else if(arg==5){
-                            if(mem.lib.books.size()!=0){
-                                System.out.println("Kindly return your books first..");
-                                continue;
-                            }
+                            //hehe
+                            //you should always return the book before paying the fine
+                            //else more fine will be added.
+                            //hence we first check if the books have been returned
                             if(mem.get_fine()==0){
                                 mem.pay_fine();
+                            }
+                            if(mem.get_fine>0){
+                                if(mem.fine.get(0)!=0){
+                                    if(mem.fine.size()==2){
+                                        if(mem.fine.get(0)!=0 && mem.fine.get(1)!=0){
+                                            System.out.println("Kindly return your books first..");
+                                            continue; 
+                                        }
+                                        else{
+                                            System.out.println("Kindly return your book first..");
+                                            continue; 
+                                        }
+                                    }
+                                    else{
+                                        System.out.println("Kindly return your book first..");
+                                        continue;
+                                    }
+                                    
+                                }
                             }
                             int fine = mem.get_fine();
                             System.out.println("---------------------------------");
